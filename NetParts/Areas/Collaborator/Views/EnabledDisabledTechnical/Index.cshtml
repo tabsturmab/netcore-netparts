@@ -1,0 +1,61 @@
+﻿@model IEnumerable<NetParts.Models.TechnicalAssistance>
+@{
+    ViewData["Title"] = "Index";
+}
+<br />
+<h1>@SR["Technical Assistance"]</h1>
+<br />
+<br />
+@{ await Html.RenderPartialAsync("~/Views/Shared/_Message.cshtml"); }
+<br />
+<br />
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">@SR["Social Reason"]</th>
+                <th scope="col">@SR["Cnpj"]</th>
+                <th scope="col">@SR["State Inscription"]</th>
+                <th scope="col">@SR["Email"]</th>
+                <th scope="col">@SR["Phone"]</th>
+                <th scope="col">@SR["Date register"]</th>
+                <th scope="col">@SR["Archives"]</th>
+                <th scope="col">@SR["Action"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (TechnicalAssistance technicalAssistance in Model)
+            {
+            <tr>
+                <td>@technicalAssistance.SocialReason</td>
+                <td>@technicalAssistance.Cnpj</td>
+                <td>@technicalAssistance.StateInscription</td>
+                <td>@technicalAssistance.EmailAta</td>
+                <td>@technicalAssistance.Phone</td>
+                <td>@technicalAssistance.DateRegister</td>
+                <td>
+                    <div class="row Images">
+                        @foreach (Archive archive in @technicalAssistance.Archives)
+                        {
+                            <a href=@archive.Way>
+                                <span class="helper"></span><img src=@archive.Way class="img-thumbnail img-upload" />
+                                <input type="hidden" name="image" />
+                            </a>
+                        }
+                    </div>
+                </td>
+                <td>
+                    @if (technicalAssistance.EnabledDisabled == true)
+                    {
+                        <a asp-action="EnabledDisabled" asp-route-id="@technicalAssistance.IdTecAssistance" class="btn btn-danger">@SR["Disable"]</a>
+                    }
+                    else
+                    {
+                        <a asp-action="EnabledDisabled" asp-route-id="@technicalAssistance.IdTecAssistance" class="btn btn-secondary">@SR["Enabled"]</a>
+                    }
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,81 @@
+﻿@model NetParts.Models.ViewModels.TechnicalAssistanceArchive
+@{
+    ViewData["Title"] = "Index";
+}
+
+@{ await Html.RenderPartialAsync("~/Views/Shared/_Message.cshtml"); }
+
+<form method="post" enctype="multipart/form-data">
+    <div class="container register">
+        <div class="row">
+            <div class="col-md-3 register-left">
+                <img src="https://cdn.pixabay.com/photo/2013/07/12/14/06/arrows-147745_960_720.png" alt="" />
+                <h3>@SR["Welcome"]</h3>
+                <p>@SR["Steps to register on the platform:"]</p>
+                <p class="text-warning">@SR["1.Register the technical assistance data."]</p>
+                <p>@SR["2.Register the collaborator data."]</p>
+                <p>@SR["3.Register the technical assistance address."]</p>
+            </div>
+            <div class="col-md-9 register-right">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <h3 class="register-heading">@SR["Technical Assistance"]</h3>
+                        <div class="row register-form">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="hidden" asp-for="technicalAssistance.IdTecAssistance" />
+                                    <label asp-for="technicalAssistance.SocialReason">@SR["Corporate Name"]</label>
+                                    <input asp-for="technicalAssistance.SocialReason" style="text-transform: uppercase" class="form-control" placeholder=@SR["Enter corporate name"]>
+                                    <span asp-validation-for="technicalAssistance.SocialReason" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="technicalAssistance.Cnpj">@SR["CNPJ"]</label>
+                                        <input asp-for="technicalAssistance.Cnpj" class="form-control cnpj" placeholder=@SR["Enter cnpj"]>
+                                        <span asp-validation-for="technicalAssistance.Cnpj" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="technicalAssistance.StateInscription">@SR["State Registration"]</label>
+                                        <input asp-for="technicalAssistance.StateInscription" class="form-control" placeholder=@SR["Enter state registration"]>
+                                        <span asp-validation-for="technicalAssistance.StateInscription" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="technicalAssistance.EmailAta">@SR["Email"]</label>
+                                        <input asp-for="technicalAssistance.EmailAta" class="form-control" placeholder=@SR["Enter email"]>
+                                        <span asp-validation-for="technicalAssistance.EmailAta" class="text-danger"></span>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="technicalAssistance.Phone">@SR["Phone"]</label>
+                                        <input asp-for="technicalAssistance.Phone" class="form-control phone" placeholder=@SR["Enter phone"]>
+                                        <span asp-validation-for="technicalAssistance.Phone" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <span class="text-danger">@SR["Attach Social Contract and Contract (s) with the Manufacturer(s) - PDF Required!"]</span>
+
+                                <div class="row Archives">
+                                    @for (int i = 0; i < 2; i++)
+                                    {
+                                        <div class="col-md-6">
+                                            <input asp-for="ImageFile" type="file" class="fileTec input-file" accept="application/pdf" />
+                                            <div class="nomeArquivo"></div>
+                                            <div class="img-thumbnail img-upload btnRegister2 text-center">@SR["Select Archive - PDF"]</div>
+                                        </div>
+                                        <br />
+                                    }
+                                </div>
+                                <br />
+                                <div class="col-md-12 center text-center">
+                                    <button type="submit" class="btnRegister">@SR["Save"]</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+

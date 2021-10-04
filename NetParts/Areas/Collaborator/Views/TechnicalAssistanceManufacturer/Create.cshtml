@@ -1,0 +1,29 @@
+﻿@model NetParts.Models.TechnicalAssistanceManufacturer
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>@SR["Create"]</h1>
+
+<form method="post">
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label asp-for="IdTecAssistance">@SR["Assistance"]</label>
+            <select asp-for="IdTecAssistance" class="form-control" asp-items="@ViewBag.TechnicalAssistances">
+                <option value="">@SR["Select"]</option>
+            </select>
+            <span asp-validation-for="IdTecAssistance" class="text-danger"></span>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label asp-for="IdManufacturer">@SR["Manufacturer"]</label>
+            <select asp-for="IdManufacturer" class="form-control" asp-items="@ViewBag.Manufacturers">
+                <option value="">@SR["Select"]</option>
+            </select>
+            <span asp-validation-for="IdManufacturer" class="text-danger"></span>
+        </div>
+    </div>
+    <br />
+    <br />
+    <button type="submit" class="btn btn-primary">@SR["Save"]</button> <a asp-action="Index" class="btn btn-info">@SR["Go Back"]</a>
+</form>

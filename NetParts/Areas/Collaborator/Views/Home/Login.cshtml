@@ -1,0 +1,44 @@
+﻿@model NetParts.Models.Collaborator
+@{
+    //ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main role="main">
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <section class="container">
+        <aside class="col-sm-6">
+            <h3 class="subtitle-doc">
+                @SR["Login Collaborator"]
+            </h3>
+            <div id="code_login_1">
+                <div class="card">
+                    <article class="card-body">
+                        <a asp-action="Register" asp-controller="Home" asp-area="" @*asp-route-returnUrl="@Context.Request.Query[" returnUrl"]"*@ class="float-right btn btn-outline-primary">@SR["Register"]</a>
+                        <h4 class="card-title mb-4 mt-1">Login</h4>
+                        @{ await Html.RenderPartialAsync("~/Views/Shared/_Message.cshtml"); }
+                        <form method="post">
+                            <div class="form-group">
+                                <label>E-mail</label>
+                                <input asp-for="Email" class="form-control" placeholder="Email" type="email">
+                            </div>
+                            <div class="form-group">
+                                <a class="float-right" asp-action="RecoverPassword" asp-controller="Home">@SR["Forgot?"]</a>
+                                <label>@SR["Password"]</label>
+                                <input asp-for="Password" class="form-control" placeholder="******" type="password">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-block">@SR["Access"]</button>
+                            </div>
+                        </form>
+                    </article>
+                </div>
+            </div>
+        </aside>
+    </section>
+</main>

@@ -1,0 +1,67 @@
+﻿@using NetParts.Models.Constant
+@using PagarMe
+@model NetParts.Models.Order
+@{
+    ViewData["Title"] = "Index";
+    decimal valorTotal = 0;
+}
+<br />
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>@SR["Order"]</h1>
+            <div class="number-order">nº @Model.IdOrder-@Model.TransactionId</div>
+
+            <table class="table table-bordered">
+                <thread>
+                    <tr>
+                        <th>@SR["Name"]</th>
+                        <th>@SR["Quantity"]</th>
+                        <th>@SR["Value"]</th>
+                    </tr>
+                </thread>
+
+                @foreach (Item item in ViewBag.Item)
+                {
+                    decimal valorUnitario = Mascara.ConverterPagarMeIntToDecimal(item.UnitPrice);
+                    decimal valorTotalItem = item.Quantity * Mascara.ConverterPagarMeIntToDecimal(item.UnitPrice);
+
+                    valorTotal += valorTotalItem;
+                    <tr>
+                        <td>@item.Title</td>
+                        <td>@item.Quantity</td>
+                        <td>
+                            @((valorTotalItem).ToString("C"))
+                            (@valorUnitario.ToString("C") @SR["unity"])
+                        </td>
+                    </tr>
+                }
+
+                <tr>
+                    <td colspan="2">@SR["Freight"]</td>
+                    <td>
+                        @{
+                            decimal frete = Mascara.ConverterPagarMeIntToDecimal(ViewBag.Transacao.Shipping.Fee);
+                            valorTotal += frete;
+                        }
+                        @frete.ToString("C")
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">TOTAL</td>
+                    <td>@valorTotal.ToString("C")</td>
+                </tr>
+            </table>
+
+            @if (Model.FormPayment == MethodPaymentConstant.Boleto)
+            {
+                <h3>@SR["Billet"]</h3>
+                <iframe src="@ViewBag.Transacao.BoletoUrl" style="width: 100%; min-height: 400px; border: 1px solid #CCC;"></iframe>
+                <a target="_blank" href="@ViewBag.Transacao.BoletoUrl" class="btn btn-outline-secondary">@SR["Print"]</a>
+            }
+
+            <a asp-action="Index" asp-controller="Home" class="btn btn-outline-primary btn-lg">@SR["Re-buy"]</a>
+        </div>
+    </div>
+</div>

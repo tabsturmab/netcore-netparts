@@ -1,0 +1,173 @@
+﻿@model List<NetParts.Models.ProductAggregator.ProductItem>
+@inject NetParts.Libraries.Login.LoginCollaborator _loginCollaborator
+@{
+    ViewData["Title"] = "Cart";
+    double Subtotal = 0;
+}
+@if (Model.Count > 0)
+{
+    <div class="container">
+        <section id="order">
+            <br />
+            <br />
+            <h2 class="title-doc">@SR["Shopping Cart"]</h2>
+            <div class="alert alert-danger" style="display: none;" role="alert"></div>
+
+            @{ await Html.RenderPartialAsync("~/Views/Shared/_Message.cshtml"); }
+
+            <div id="code_cart">
+                <div class="card">
+                    <table class="table table-hover shopping-cart-wrap">
+                        <thead class="text-muted">
+                            <tr>
+                                <th scope="col">@SR["Product"]</th>
+                                <th scope="col" width="180">@SR["Quantity"]</th>
+                                <th scope="col" width="120">@SR["Price"]</th>
+                                <th scope="col" width="200" class="text-right">@SR["Action"]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <figure class="media">
+                                            <div class="img-wrap">
+                                                @if (item.Product.Images.Count > 0)
+                                                {
+                                                    <img src="@item.Product.Images.First().Way" class="img-thumbnail img-sm">
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/img/imagem-produto.png" class="img-thumbnail img-sm">
+                                                }
+                                            </div>
+                                            <figcaption class="media-body">
+                                                <h6 class="title text-truncate">Part Number: @item.Product.PartNumber</h6>
+                                                <h5 class="title text-truncate">@item.Product.Description</h5>
+                                                <dl class="dlist-inline small">
+                                                    <dt>@SR["Quantity in stock:"]</dt>
+                                                    <dd>@item.Amount</dd>
+                                                </dl>
+                                            </figcaption>
+                                        </figure>
+                                    </td>
+                                    <td>
+                                        <div class="col-auto">
+                                            <div class="input-group mb-2 control-inline">
+                                                <input type="hidden" class="inputIdAdvert" value="@item.IdAdvert" />
+                                                <input type="hidden" class="inputQuantityStock" value="@item.Amount" />
+                                                <input type="hidden" class="inputPriceUnitary" value="@item.Price" />
+                                                <div class="input-group-prepend">
+                                                    <a href="#" class="btn btn-primary less"> - </a>
+                                                </div>
+                                                <input type="text" style="width: 60px; text-align: center" readonly="readonly" class="form-control inputQuantityProductCart" value="@item.QuantityProduct">
+                                                <div class="input-group-append">
+                                                    <a href="#" class="btn btn-primary more"> + </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    @{
+                                        var ResultSubtotalItem = item.Price * item.QuantityProduct;
+                                        Subtotal = Subtotal + ResultSubtotalItem;
+                                    }
+                                    <td>
+                                        <div class="price-wrap">
+                                            <var class="price">@(ResultSubtotalItem.ToString("C"))</var>
+                                            <small class="text-muted">(@item.Price.ToString("C") @SR["price"])</small>
+                                        </div>
+                                    </td>
+                                    <td class="text-right">
+                                        <a asp-controller="ShoppingCart" asp-action="RemoveItem" asp-route-id="@item.IdAdvert" class="btn btn-danger">@SR["Remove"]</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        <br />
+        <br />
+        <section id="parameters">
+            <div class="row">
+                <aside class="col-md-4">
+                    <div id="code_desc_align">
+                        <div class="box">
+                            <h4 class="subtitle-doc">
+                                @SR["Freight"]
+                            </h4>
+                            <dl class="dlist-align">
+                                <dt>@SR["Zip Code:"]</dt>
+                                <dd>
+                                    <div class="input-group">
+                                        <input type="text" name="cep" class="form-control cep" />
+                                        <div class="input-group-append">
+                                            <a href="#" class="btn btn-outline-primary btn-calcular-frete">OK</a>
+                                        </div>
+                                    </div>
+                                </dd>
+                            </dl>
+                            <div class="container-frete">
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+                <aside class="col-md-4">
+                    <div id="code_desc_right">
+                        <div class="box">
+                            <h4 class="subtitle-doc">
+                                @SR["Resume"]
+                                <a href="#" data-html="code_desc_right" class="showcode"></a>
+                            </h4>
+                            <dl class="dlist-align">
+                                <dt>Subtotal:</dt>
+                                <dd class="text-right subtotal">@Subtotal.ToString("C")</dd>
+                            </dl>
+                            <dl class="dlist-align">
+                                <dt>@SR["Freight:"]</dt>
+                                <dd class="text-right frete">R$ 0,00</dd>
+                            </dl>
+                            <dl class="dlist-align">
+                                <dt>TOTAL:</dt>
+                                <dd class="text-right total">R$ 0,00</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </aside>
+                <aside class="col-md-4">
+                    <div class="box">
+                        @if (_loginCollaborator.GetCollaborator() == null)
+                        {
+                        <a asp-action="Login" asp-controller="Home" asp-area="Collaborator" asp-route-returnUrl="@Url.Action("AddAddress", "ShoppingCart", new { area = ""})" class="btn btn-primary btn-continuar disabled">@SR["Continue"]</a>
+                        }
+                        else
+                        {
+                            <a asp-action="AddAddress" asp-controller="ShoppingCart" class="btn btn-primary btn-continuar disabled">@SR["Continue"]</a>
+                        }
+                    </div>
+                </aside>
+            </div>
+        </section>
+    </div>
+}
+else
+{
+    <div class="container">
+        <br />
+        <br />
+        <div class="row">
+            <div class="col-md-12">
+                @SR["You have not added any products to your cart?"] <a asp-controller="Home" asp-action="Index">@SR["Click here"]</a> @SR["and start buying"]
+            </div>
+            <br />
+            <br />
+            <div class="offset-md-4 col-md-4">
+                <a class="btn btn-outline-primary btn-continuar-comprando" asp-action="Index" asp-controller="Home">
+                    @SR["Let's go shopping"]
+                </a>
+            </div>
+        </div>
+    </div>
+}

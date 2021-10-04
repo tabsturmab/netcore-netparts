@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetParts", "NetParts\NetParts.csproj", "{138039C2-EE01-4B0A-A0B1-00502897757E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PagarMe", "PagarMe", "{241C9D49-B30D-47BF-A107-AA176A632312}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PagarMeCore", "PagarMe\PagarMeCore\PagarMeCore.csproj", "{4FA88570-BF21-43F3-9AB0-49D721F6BB5D}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PagarMe.Shared", "PagarMe\PagarMe.Shared\PagarMe.Shared.shproj", "{A1E35F76-C32B-4490-BB52-282A27E0A37D}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		PagarMe\PagarMe.Shared\PagarMe.Shared.projitems*{4fa88570-bf21-43f3-9ab0-49d721f6bb5d}*SharedItemsImports = 5
+		PagarMe\PagarMe.Shared\PagarMe.Shared.projitems*{a1e35f76-c32b-4490-bb52-282a27e0a37d}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{138039C2-EE01-4B0A-A0B1-00502897757E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{138039C2-EE01-4B0A-A0B1-00502897757E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{138039C2-EE01-4B0A-A0B1-00502897757E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{138039C2-EE01-4B0A-A0B1-00502897757E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FA88570-BF21-43F3-9AB0-49D721F6BB5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FA88570-BF21-43F3-9AB0-49D721F6BB5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FA88570-BF21-43F3-9AB0-49D721F6BB5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FA88570-BF21-43F3-9AB0-49D721F6BB5D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4FA88570-BF21-43F3-9AB0-49D721F6BB5D} = {241C9D49-B30D-47BF-A107-AA176A632312}
+		{A1E35F76-C32B-4490-BB52-282A27E0A37D} = {241C9D49-B30D-47BF-A107-AA176A632312}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8943851F-4447-4D16-AAA6-CCC8D721B4A8}
+	EndGlobalSection
+EndGlobal

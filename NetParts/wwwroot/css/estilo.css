@@ -1,0 +1,20 @@
+header{
+	padding:50px 0 30px 0;
+	background: linear-gradient(90deg, #09F 0%, #306 100%);
+}
+
+footer{
+	padding: 20px 0;
+}
+
+.navbar-default{
+	background: linear-gradient(90deg, #09F 0%, #306 100%);
+}
+
+#product{
+	padding: 80px 0px;
+}
+
+#container{
+    padding: 80px 0px;
+}

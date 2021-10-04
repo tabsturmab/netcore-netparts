@@ -1,0 +1,47 @@
+﻿@model IPagedList<Order>
+@{
+    ViewData["Title"] = "Index";
+}
+<br />
+<br />
+<div class="container">
+    <h3 class="text-center">@SR["Shopping"]</h3>
+    <br />
+    @{ await Html.RenderPartialAsync("~/Views/Shared/_Message.cshtml"); }
+
+    @if (Model.Count > 0)
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">Nº @SR["Order"]</th>
+                        <th scope="col">@SR["Purchase date"]</th>
+                        <th scope="col">@SR["Value"]</th>
+                        <th scope="col">@SR["Form payment"]</th>
+                        <th scope="col">@SR["Situation"]</th>
+                        <th scope="col">@SR["NF-e"]</th>
+                        <th scope="col">@SR["Actions"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td>@order.IdOrder-@order.TransactionId</td>
+                            <td>@order.DateRegisterOrder.ToString("dd/MM/yyyy")</td>
+                            <td>@order.ValueTotal.ToString("C")</td>
+                            <td>@order.FormPayment</td>
+                            <td>@order.Situation</td>
+                            <td>@Html.Raw(order.NFe == null ? "-" : "<a href='" + order.NFe + "' target='_blank'>NF-e</a>")</td>
+                            <td>
+                                <a asp-action="View" asp-route-id="@order.IdOrder">@SR["View"]</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page = page }))
+</div>

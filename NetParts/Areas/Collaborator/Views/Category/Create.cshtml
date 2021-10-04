@@ -1,0 +1,27 @@
+﻿@model NetParts.Models.Category
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>@SR["Create"]</h1>
+
+<form method="post" id="form-category">
+    <div class="form-group">
+        <label asp-for="NameCategory">@SR["Name Category"]</label>
+        <input asp-for="NameCategory" class="form-control" placeholder=@SR["Enter category name"]>
+        <span asp-validation-for="NameCategory" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Slug">Slug</label>
+        <input asp-for="Slug" readonly="readonly" class="form-control">
+        <span asp-validation-for="Slug" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CategoryMasterId">@SR["Category Master"]</label>
+        <select asp-for="CategoryMasterId" class="form-control" asp-items="@ViewBag.Categories">
+            <option value="">@SR["Select"]</option>
+        </select>
+        <span asp-validation-for="CategoryMasterId" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">@SR["Save"]</button> <a asp-action="Index" class="btn btn-info">@SR["Go Back"]</a>
+</form>

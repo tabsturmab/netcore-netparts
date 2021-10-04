@@ -1,0 +1,55 @@
+﻿@model ProductListViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5 col-12 text-light jumbotron bg-transparent">
+                <h1>@SR["Parts and Components with origin"]</h1>
+                <p class="text-light">@SR["We are an E-Marketplace for Authorized Technical Assistance. We mediate the purchase and sale of parts and components between technical assistance from major manufacturers such as: Brastemp, Electrolux, Sony, among others."]</p>
+                <a href="#course" class="btn btn-dark btn-lg">@SR["Meet our partners"]</a>
+            </div>
+            <div class="col-lg-7 col-12">
+                <div id="img-home" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#img-home" data-slide-to="0" class="active"></li>
+                        <li data-target="#img-home" data-slide-to="1"></li>
+                        <li data-target="#img-home" data-slide-to="2"></li>
+                    </ol>
+                    <div class="carousel-inner">
+                        <!-- imagem 01 -->
+                        <div class="carousel-item active">
+                            <img class="img-fluid rounded-pill" src="~/img/01.png">
+                            <div class="carousel-caption">
+                                <h5 class="text-light">@SR["Kit miscellaneous electronic components"]</h5>
+                                <a class="text-light" href="#course">@SR["Resistor"] | @SR["Capacitor"] | @SR["Semiconductor"] | @SR["340 pieces"]</a>
+                            </div>
+                        </div>
+                        <!-- imagem 02 -->
+                        <div class="carousel-item">
+                            <img class="img-fluid rounded-pill" src="~/img/04.png"/> 
+                            <div class="carousel-caption">
+                                <h5 class="text-light">@SR["The best of the Brand"]</h5>
+                                <a class="text-light" href="#course">@SR["Original parts and components"]</a>
+                            </div>
+                        </div>
+                        <!-- imagem 03 -->
+                        <div class="carousel-item">
+                            <img class="img-fluid rounded-pill" src="~/img/03.png">
+                            <div class="carousel-caption">
+                                <h5 class="text-light">@SR["Panel"]</h5>
+                                <a class="text-light" href="#course">@SR["Panasonic Washer Front Panel"]</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<br />
+<br />
+
+<vc:product-list></vc:product-list>

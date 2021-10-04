@@ -1,0 +1,67 @@
+﻿@model NetParts.Models.Collaborator
+@{
+    ViewData["Title"] = "Create";
+}
+
+<form method="post">
+    <div class="container register">
+        <div class="row">
+            <div class="col-md-3 register-left">
+                <img src="https://cdn.pixabay.com/photo/2013/07/12/14/06/arrows-147745_960_720.png" alt="" />
+                <h3>@SR["Welcome"]</h3>
+                <p>@SR["Steps to register on the platform:"]</p>
+                <p>@SR["1.Register the technical assistance data."]</p>
+                <p class="text-warning">@SR["2.Register the collaborator data."]</p>
+                <p>@SR["3.Register the technical assistance address."]</p>
+            </div>
+            <div class="col-md-9 register-right">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <h3 class="register-heading">@SR["Collaborator"]</h3>
+                        <div class="row register-form">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="hidden" asp-for="IdTecAssistance" class="form-control" value="0" />
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    @Html.HiddenFor(model => model.IdCollaborator)
+                                    <label asp-for="FirstName">@SR["First Name"]</label>
+                                    <input asp-for="FirstName" class="form-control" placeholder=@SR["Enter first name"]>
+                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="LastName">@SR["Last Name"]</label>
+                                    <input asp-for="LastName" class="form-control" placeholder=@SR["Enter last name"]>
+                                    <span asp-validation-for="LastName" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="Cpf">CPF</label>
+                                        <input asp-for="Cpf" class="form-control cpf" placeholder=@SR["Enter cpf"]>
+                                        <span asp-validation-for="Cpf" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="Email">@SR["E-mail"]</label>
+                                        <input asp-for="Email" class="form-control" placeholder=@SR["Enter email"]>
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @SR["Type Collaborator"]
+                                    @Html.DropDownListFor(d => d.TypeCollaborator, new SelectList(new List<object>
+                                    {
+                                        new {value = "Gerente", text = "Gerente"},
+                                    }, "value", "text", ""), new {@class = "form-control"})
+                                    @Html.ValidationMessageFor(model => model.TypeCollaborator, "", new { @class = "text-danger" })
+                                </div>
+                                <br />
+                                <div class="col-md-12 center text-center">
+                                    <button type="submit" class="btnRegister">@SR["Save"]</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

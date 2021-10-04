@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Register";
+}
+
+<form method="post" enctype="multipart/form-data">
+    <div class="container register">
+        <div class="row">
+            <div class="col-md-3 register-left">
+                <img src="https://images.vexels.com/media/users/3/157932/isolated/lists/951a617272553f49e75548e212ed947f-icone-de-marca-de-selecao-curvo.png" alt="" />
+                <h3>@SR["Welcome"]</h3>
+                <p>@SR["Steps to register on the platform:"]</p>
+                <p class="text-warning">@SR["1.Register the technical assistance data."]</p>
+                <p class="text-warning">@SR["2.Register the collaborator data."]</p>
+                <p class="text-warning">@SR["3.Register the technical assistance address."]</p>
+            </div>
+            <div class="col-md-9 register-right">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="row register-form">
+                            <br/>
+                            <br/>
+                            <br/>
+                            <div class="col-md-12 align-self-center center text-center">
+                                @{ await Html.RenderPartialAsync("~/Views/Shared/_Message.cshtml"); }
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <div class="alert alert-success col-12 center text-center"  role="alert">
+                                <p>@SR["Our deadline for activating Technical Assistance is 3 to 5 days after confirmation of the documentation!"]</p>
+                            </div>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <div class="col-md-12 align-self-center center text-center">
+                                <p>@SR["Wait for the activation email."]</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

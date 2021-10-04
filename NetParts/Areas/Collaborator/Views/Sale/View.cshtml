@@ -1,0 +1,490 @@
+﻿@model DisplayViewModel
+@inject Microsoft.Extensions.Configuration.IConfiguration _config;
+
+@{
+    ViewData["Title"] = "View";
+    TransacaoPagarMe transaction = JsonConvert.DeserializeObject<TransacaoPagarMe>(Model.OrderAdvertisement.Order.DataTransaction);
+}
+
+@section script {
+
+    @if (ViewBag.MODAL_NFE != null)
+    {
+        <script type="text/javascript">
+            $('#nfe').modal();
+        </script>
+    }
+    @if (ViewBag.MODAL_TRACKING != null)
+    {
+        <script type="text/javascript">
+            $('#tracking').modal();
+        </script>
+    }
+    @*@if (ViewBag.MODAL_CREDITCARD != null)
+    {
+        <script type="text/javascript">
+            $('#cancel-cartao').modal();
+        </script>
+    }
+    @if (ViewBag.MODAL_BILLET != null)
+    {
+        <script type="text/javascript">
+            $('#cancel-boleto').modal();
+        </script>
+    }
+    @if (ViewBag.MODAL_GIVEBACK != null)
+    {
+        <script type="text/javascript">
+            $('#devolver').modal();
+        </script>
+    }
+    @if (ViewBag.MODAL_GIVEBACK_REJECT != null)
+    {
+        <script type="text/javascript">
+            $('#devolver-rejeitar').modal();
+        </script>
+    }
+    @if (ViewBag.MODAL_DEVOLUTON_BILLET != null)
+    {
+        <script type="text/javascript">
+            $('#devolver-aprovar-boleto').modal();
+        </script>
+    }*@
+}
+<br />
+<br />
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <vc:order-situation order="@Model.OrderAdvertisement.Order" />
+            <br />
+            <br />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            @if (Model.OrderAdvertisement.Order.Situation == OrderSituationConstant.PAGAMENTO_APROVADO)
+            {
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nfe">
+                    @SR["Register NF-e"]
+                </button>
+            }
+            @if (Model.OrderAdvertisement.Order.Situation == OrderSituationConstant.NF_EMITIDA)
+            {
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tracking">
+                    @SR["Register Cod. Tracking"]
+                </button>
+            }
+            @*@if (Model.OrderAdvertisement.Order.Situation == OrderSituationConstant.NF_EMITIDA || Model.OrderAdvertisement.Order.Situation == OrderSituationConstant.PAGAMENTO_APROVADO)
+            {
+                if (Model.OrderAdvertisement.Order.FormPayment == MethodPaymentConstant.CartaoCredito)
+                {
+                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#cancel-cartao">
+                        @SR["Cancel order"]
+                    </button>
+                }
+
+                if (Model.OrderAdvertisement.Order.FormPayment == MethodPaymentConstant.Boleto)
+                {
+                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#cancel-boleto">
+                        @SR["Cancel order"]
+                    </button>
+                }
+            }*@
+            @if (Model.OrderAdvertisement.Order.Situation == OrderSituationConstant.ENTREGUE)
+            {
+                var orderSituation = Model.OrderAdvertisement.Order.OrderSituation.FirstOrDefault(a => a.Situation == OrderSituationConstant.ENTREGUE);
+
+                double DaysGiveBack = double.Parse(_config.GetSection("Finalizado").GetSection("Days").Value) - 1;
+
+                if (orderSituation != null && DateTime.Now <= orderSituation.Date.AddDays(DaysGiveBack))
+                {
+                    @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#devolver">
+                        @SR["Give back"]
+                    </button>*@
+                }
+            }
+            @*@if (Model.OrderAdvertisement.Order.Situation == OrderSituationConstant.DEVOLVER_ENTREGUE)
+            {
+                if (Model.OrderAdvertisement.Order.FormPayment == MethodPaymentConstant.CartaoCredito)
+                {
+                    <button type="button" class="btn btn-success" asp-action="RegisterGiveBackOrderApproveCard" asp-route-id="@Model.OrderAdvertisement.Order.IdOrder">@SR["Approve devolution"]</button>
+                }
+                if (Model.OrderAdvertisement.Order.FormPayment == MethodPaymentConstant.Boleto)
+                {
+                    <button type="button" class="btn btn-success" data-target="#devolver-aprovar-boleto">@SR["Approve devolution"]</button>
+                }
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#devolver-rejeitar">
+                    @SR["Reject devolution"]
+                </button>
+            }*@
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>@SR["Data order"]</h3>
+
+            <table class="table table-bordered">
+                <tr>
+                    <td colspan="2"><strong>@SR["Situation order:"]</strong> @Model.OrderAdvertisement.Order.Situation</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><strong>@SR["Company:"]</strong> @transaction.Customer.Name</td>
+                </tr>
+                <tr>
+                    <td><strong>@SR["Form payment"]:</strong> @Model.OrderAdvertisement.Order.FormPayment</td>
+                </tr>
+                <tr>
+                    <td><strong>@SR["Electronic invoice:"]</strong> @Html.Raw(Model.OrderAdvertisement.Order.NFe == null ? "-" : "<a href='" + Model.OrderAdvertisement.Order.NFe + "' target='_blank'>NF-e</a>")</td>
+                </tr>
+            </table>
+
+            <h3>@SR["Delivery"]</h3>
+            <table class="table table-bordered">
+
+                <tr>
+                    <td><strong>@SR["Zipcode:"]</strong> @transaction.Shipping.Address.Zipcode</td>
+                    <td><strong>@SR["State:"]</strong> @transaction.Shipping.Address.State</td>
+                    <td><strong>@SR["City:"]</strong> @transaction.Shipping.Address.City</td>
+                    <td><strong>@SR["Neighborhood:"]</strong> @transaction.Shipping.Address.Neighborhood</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><strong>@SR["Street:"]</strong> @transaction.Shipping.Address.Street</td>
+                    <td><strong>@SR["StreetNumber:"]</strong> @transaction.Shipping.Address.StreetNumber</td>
+                    <td><strong>@SR["Complementary:"]</strong> @transaction.Shipping.Address.Complementary</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><strong>@SR["Company:"]</strong> @Model.OrderAdvertisement.Order.FreightCompany</td>
+                    <td><strong>@SR["Value freight:"]</strong> @Mascara.ConverterPagarMeIntToDecimal(transaction.Shipping.Fee).ToString("C")</td>
+                    <td><strong>@SR["FreightCodTracking:"]</strong> @Html.Raw(Model.OrderAdvertisement.Order.FreightCodTracking == null ? "-" : "<a href='https://www.linkcorreios.com.br/" + Model.OrderAdvertisement.Order.FreightCodTracking + "' target='_blank'>" + Model.OrderAdvertisement.Order.FreightCodTracking + "</a>")</td>
+                </tr>
+            </table>
+
+            @if (Model.OrderAdvertisement.Order.Situation == OrderSituationConstant.DEVOLVER_ENTREGUE)
+            {
+                var giveback = Model.OrderAdvertisement.Order.OrderSituation.FirstOrDefault(a => a.Situation == OrderSituationConstant.DEVOLVER);
+                ReverseOrderGiveBack dataGiveback = JsonConvert.DeserializeObject<ReverseOrderGiveBack>(giveback.Data);
+
+                var givebackDelivery = Model.OrderAdvertisement.Order.OrderSituation.FirstOrDefault(a => a.Situation == OrderSituationConstant.DEVOLVER_ENTREGUE);
+                var dataCorreiosGiveback = JsonConvert.DeserializeObject<Correios.NET.Models.Package>(givebackDelivery.Data);
+                <h3>@SR["Give Back"]</h3>
+                <table class="table table-bordered">
+                    <tr>
+                        <td><strong>@SR["Company:"]</strong> @Model.OrderAdvertisement.Order.FreightCompany</td>
+                        <td><strong>@SR["Tracking Code:"] </strong>@Html.Raw(dataGiveback.TrackingCode == null ? "-" : "<a href='https://www.linkcorreios.com.br/" + dataGiveback.TrackingCode + "' target='_blank'>" + dataGiveback.TrackingCode + "</a>")</td>
+                        <td><strong>@SR["Date GiveBack:"]</strong>@dataCorreiosGiveback.DeliveryDate.ToString()</td>
+                    </tr>
+                </table>
+            }
+
+
+            <h3>@SR["Product list"]</h3>
+            <table class="table table-bordered">
+                <tr>
+                    <th class="text-center">@SR["Quantity"]</th>
+                    <th class="text-center">@SR["Description"]</th>
+                    <th class="text-center">@SR["Value"]</th>
+                    <th class="text-center">@SR["TOTAL"]</th>
+                </tr>
+
+                @foreach (Item item in transaction.Item)
+                {
+                    <tr>
+                        <td class="text-center">@item.Quantity</td>
+                        <td>@item.Title</td>
+                        <td class="text-right">@Mascara.ConverterPagarMeIntToDecimal(item.UnitPrice).ToString("C")</td>
+                        <td class="text-right">@Mascara.ConverterPagarMeIntToDecimal((item.UnitPrice) * item.Quantity).ToString("C")</td>
+                    </tr>
+                }
+                <tr>
+                    <td colspan="3"><strong>@SR["Freight"]</strong></td>
+                    <td class="text-right">@Mascara.ConverterPagarMeIntToDecimal(transaction.Shipping.Fee).ToString("C")</td>
+                </tr>
+                <tr>
+                    <td colspan="3"><strong>@SR["TOTAL"]</strong></td>
+                    <td class="text-right">@Model.OrderAdvertisement.Order.ValueTotal.ToString("C")</td>
+                </tr>
+            </table>
+            <br />
+            <br />
+            <button class="btn btn-outline-primary btn-lg btn-printout">@SR["Print"]</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal NFe -->
+<form method="post" asp-action="NFE" asp-route-id="@Model.OrderAdvertisement.Order.IdOrder">
+    <div class="modal fade" id="nfe" tabindex="-1" role="dialog" aria-labelledby="nfe" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">@SR["NFe"]</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="control-nfe">@SR["NF-e Link:"]</label>
+                        <input type="url" class="form-control" id="control-nfe" asp-for="@Model.NFE.NFE_URL" placeholder="URL - NF-e">
+                        <span asp-validation-for="@Model.NFE.NFE_URL" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@SR["Close"]</button>
+                    <button type="submit" class="btn btn-primary">@SR["Save"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Modal Tracking -->
+<form method="post" asp-action="TrackingCode" asp-route-id="@Model.OrderAdvertisement.Order.IdOrder">
+    <div class="modal fade" id="tracking" tabindex="-1" role="dialog" aria-labelledby="tracking" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">@SR["Tracking Code"]</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="tracking_code">@SR["Code:"]</label>
+                        <input type="text" class="form-control" id="tracking_code" asp-for="@Model.TrackingCode.CodeTracking" placeholder=@SR["Tracking Code"]>
+                        <span asp-validation-for="@Model.TrackingCode.CodeTracking" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@SR["Close"]</button>
+                    <button type="submit" class="btn btn-primary">@SR["Save"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Modal Estorno Cartão de Crédito-->
+@*<form method="post" asp-action="RegisterCancellationOrderCreditCard" asp-route-id="@Model.OrderAdvertisement.Order.IdOrder">
+    <div class="modal fade" id="cancel-cartao" tabindex="-1" role="dialog" aria-labelledby="cancel-cartao" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">@SR["Cancel Order - Card Credit"]</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="reason">@SR["Reason:"]</label>
+                        <textarea class="form-control" id="reason" asp-for="@Model.CardCredit.Reason" placeholder=@SR["Cancel Reason"]></textarea>
+                        <span asp-validation-for="@Model.CardCredit.Reason" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@SR["Close"]</button>
+                    <button type="submit" class="btn btn-primary">@SR["Save"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Modal Estorno Boleto -->
+<form method="post" asp-action="RegisterCancellationOrderBillet" asp-route-id="@Model.OrderAdvertisement.Order.IdOrder">
+    <div class="modal fade" id="cancel-boleto" tabindex="-1" role="dialog" aria-labelledby="cancel-boleto" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">@SR["Cancel Order - Billet"]</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="reason">@SR["Reason:"]</label>
+                        <textarea class="form-control" id="reason" asp-for="@Model.Billet.Reason" placeholder=@SR["Reason"]></textarea>
+                        <span asp-validation-for="@Model.Billet.Reason" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cod_banco">@SR["Code Bank:"]</label>
+                        <input type="text" class="form-control" id="cod_banco" asp-for="@Model.Billet.BankCode" placeholder=@SR["Code Bank"]>
+                        <span asp-validation-for="@Model.Billet.BankCode" class="text-danger"></span>
+                        <a href="http://www.febraban.org.br/associados/utilitarios/Bancos.asp" target="_blank">@SR["Consult"]</a>
+                    </div>
+                    <div class="form-group">
+                        <label for="agency">@SR["Agency:"]</label>
+                        <input type="text" class="form-control" id="agency" asp-for="@Model.Billet.Agency" placeholder=@SR["Nº Agency"]>
+                        -
+                        <input type="text" maxlength="2" class="form-control" id="agency_dv" asp-for="@Model.Billet.AgencyDv" placeholder="DV">
+                        <span asp-validation-for="@Model.Billet.Agency" class="text-danger"></span>
+                        <span asp-validation-for="@Model.Billet.AgencyDv" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="cc">@SR["Account:"]</label>
+                        <input type="text" class="form-control" id="cc" asp-for="@Model.Billet.Account" placeholder=@SR["Account"]>
+                        -
+                        <input type="text" class="form-control" id="cc_dv" asp-for="Billet.AccountDv" placeholder="DV">
+                        <span asp-validation-for="@Model.Billet.Account" class="text-danger"></span>
+                        <span asp-validation-for="@Model.Billet.AccountDv" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">@SR["Account Owner Name:"]</label>
+                        <input type="text" class="form-control" id="name" asp-for="@Model.Billet.LegalName" placeholder=@SR["Name"]>
+                        <span asp-validation-for="@Model.Billet.LegalName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="cnpj">@SR["CNPJ"]</label>
+                        <input type="text" class="form-control" id="cnpj" asp-for="@Model.Billet.CNPJ" placeholder=@SR["CNPJ"]>
+                        <span asp-validation-for="@Model.Billet.CNPJ" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@SR["Close"]</button>
+                    <button type="submit" class="btn btn-primary">@SR["Save"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Modal Devolução-->
+<form method="post" asp-action="RegisterCancellationOrderGiveBack" asp-route-id="@Model.OrderAdvertisement.Order.IdOrder">
+    <div class="modal fade" id="#devolver" tabindex="-1" role="dialog" aria-labelledby="devolver" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">@SR["Cancel Order - Give Back"]</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="reason">@SR["Reason:"]</label>
+                        <textarea class="form-control" id="reason" asp-for="@Model.GiveBack.Reason" placeholder=@SR["Cancel Reason"]></textarea>
+                        <span asp-validation-for="@Model.GiveBack.Reason" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="tracking_code">@SR["Tracking Code:"]</label>
+                        <input type="text" class="form-control" id="tracking_code" asp-for="@Model.GiveBack.TrackingCode" placeholder=@SR["Tracking Code"]>
+                        -
+                        <input type="text" maxlength="2" class="form-control" id="tracking_code" asp-for="@Model.GiveBack.TrackingCode" placeholder="">
+                        <span asp-validation-for="@Model.GiveBack.TrackingCode" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@SR["Close"]</button>
+                    <button type="submit" class="btn btn-primary">@SR["Save"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<!-- Modal Devolução-Rejeição-->
+<form method="post" asp-action="RegisterRejectOrderGiveBack" asp-route-id="@Model.OrderAdvertisement.Order.IdOrder">
+    <div class="modal fade" id="#devolver-rejeitar" tabindex="-1" role="dialog" aria-labelledby="devolver-rejeitar" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">@SR["Give Back - Reject"]</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="reason">@SR["Reason:"]</label>
+                        <textarea class="form-control" id="reason" asp-for="@Model.GiveBack.Reason" placeholder=@SR["Reason"]></textarea>
+                        <span asp-validation-for="@Model.GiveBack.Reason" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="tracking_code">@SR["Tracking Code:"]</label>
+                        <input type="text" class="form-control" id="tracking_code" asp-for="@Model.GiveBack.TrackingCode" placeholder=@SR["Tracking Code"]>
+                        -
+                        <input type="text" maxlength="2" class="form-control" id="tracking_code" asp-for="@Model.GiveBack.TrackingCode" placeholder="">
+                        <span asp-validation-for="@Model.GiveBack.TrackingCode" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@SR["Close"]</button>
+                    <button type="submit" class="btn btn-primary">@SR["Save"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Modal Aprovado Boleto -->
+<form method="post" asp-action="RegisterGiveBackOrderApproveBillet" asp-route-id="@Model.OrderAdvertisement.Order.IdOrder">
+    <div class="modal fade" id="devolver-aprovar-boleto" tabindex="-1" role="dialog" aria-labelledby="devolver-aprovar-boleto" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">@SR["Cancel Order - Devolution Money"]</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group">
+                        <label for="cod_banco">@SR["Code Bank:"]</label>
+                        <input type="text" class="form-control" id="cod_banco" asp-for="@Model.Billet.BankCode" placeholder=@SR["Code Bank"]>
+                        <span asp-validation-for="@Model.Billet.BankCode" class="text-danger"></span>
+                        <a href="http://www.febraban.org.br/associados/utilitarios/Bancos.asp" target="_blank">@SR["Consult"]</a>
+                    </div>
+                    <div class="form-group">
+                        <label for="agency">@SR["Agency:"]</label>
+                        <input type="text" class="form-control" id="agency" asp-for="@Model.Billet.Agency" placeholder=@SR["Nº Agency"]>
+                        -
+                        <input type="text" maxlength="2" class="form-control" id="agency_dv" asp-for="@Model.Billet.AgencyDv" placeholder="DV">
+                        <span asp-validation-for="@Model.Billet.Agency" class="text-danger"></span>
+                        <span asp-validation-for="@Model.Billet.AgencyDv" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="cc">@SR["Account:"]</label>
+                        <input type="text" class="form-control" id="cc" asp-for="@Model.Billet.Account" placeholder=@SR["Account"]>
+                        -
+                        <input type="text" class="form-control" id="cc_dv" asp-for="Billet.AccountDv" placeholder="DV">
+                        <span asp-validation-for="@Model.Billet.Account" class="text-danger"></span>
+                        <span asp-validation-for="@Model.Billet.AccountDv" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="name">@SR["Account Owner Name:"]</label>
+                        <input type="text" class="form-control" id="name" asp-for="@Model.Billet.LegalName" placeholder=@SR["Name"]>
+                        <span asp-validation-for="@Model.Billet.LegalName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="cnpj">@SR["CNPJ"]</label>
+                        <input type="text" class="form-control" id="cnpj" asp-for="@Model.Billet.CNPJ" placeholder=@SR["CNPJ"]>
+                        <span asp-validation-for="@Model.Billet.CNPJ" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@SR["Close"]</button>
+                    <button type="submit" class="btn btn-primary">@SR["Save"]</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>*@

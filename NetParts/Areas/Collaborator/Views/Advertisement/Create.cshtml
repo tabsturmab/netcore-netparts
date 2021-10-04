@@ -1,0 +1,38 @@
+﻿@model NetParts.Models.Advertisement
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>@SR["Create"]</h1>
+
+<form method="post">
+    <div class="row">
+        <input type="hidden" asp-for="IdAdvert" />
+
+        <div class="form-group col-md-6">
+            <label asp-for="IdProduct">@SR["Product"]</label>
+            <select asp-for="IdProduct" class="form-control" style="text-transform: uppercase" asp-items="@ViewBag.Products">
+                <option value="">@SR["Select"]</option>
+            </select>
+            <span asp-validation-for="IdProduct" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label asp-for="Amount">@SR["Quantity"]</label>
+                <input asp-for="Amount" class="form-control" placeholder=@SR["Enter quantity"]>
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+
+            <div class="form-group col-md-6">
+                <label asp-for="Price">@SR["Price"]</label>
+                <input asp-for="Price" class="form-control dinheiro" placeholder=@SR["Enter price"]>
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+        </div>
+
+    </div>
+    <br />
+    <br />
+    <button type="submit" class="btn btn-primary">@SR["Save"]</button> <a asp-action="Index" class="btn btn-info">@SR["Go Back"]</a>
+</form>

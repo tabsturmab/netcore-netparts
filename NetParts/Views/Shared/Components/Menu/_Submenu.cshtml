@@ -1,0 +1,30 @@
+﻿@{
+    var GetCategories = (List<Category>)ViewData["GetCategories"];
+    var CategoryMaster = (Category)ViewData["CategoryMaster"];
+
+    var CategoriesSon = GetCategories.Where(a => a.CategoryMasterId == CategoryMaster.IdCategory).OrderBy(a => a.NameCategory);
+}
+@if (CategoriesSon.Count() > 0)
+{
+    <li class="dropdown-submenu">
+        <a class="dropdown-item" tabindex="-1" asp-controller="Product" asp-action="ListCategory" asp-route-slug="@CategoryMaster.Slug">@CategoryMaster.NameCategory</a>
+        <ul class="dropdown-menu">
+            @foreach (var categoryS in CategoriesSon)
+            {
+                @if (GetCategories.Where(a => a.CategoryMasterId == categoryS.IdCategory).OrderBy(a => a.NameCategory).Count() > 0)
+                {
+                    ViewData.Remove("CategoryMaster");
+                    @await Html.PartialAsync("~/Views/Shared/Components/Menu/_Submenu.cshtml", new ViewDataDictionary(ViewData) { { "CategoryMaster", categoryS } })
+                }
+                else
+                {
+                    <li class="dropdown-item"><a asp-controller="Product" asp-action="ListCategory" asp-route-slug="@categoryS.Slug">@categoryS.NameCategory</a></li>
+                }
+            }
+        </ul>
+    </li>
+}
+else
+{
+    <li class="dropdown-item"><a asp-controller="Product" asp-action="ListCategory" asp-route-slug="@CategoryMaster.Slug">@CategoryMaster.NameCategory</a></li>
+}

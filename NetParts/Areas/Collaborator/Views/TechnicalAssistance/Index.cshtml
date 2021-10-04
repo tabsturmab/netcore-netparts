@@ -1,0 +1,57 @@
+﻿@using NetParts.Models.ViewModels
+@model IEnumerable<NetParts.Models.TechnicalAssistance>
+@{
+    ViewData["Title"] = "Index";
+}
+<br />
+<h1>@SR["Technical Assistance"]</h1>
+<br />
+@{ await Html.RenderPartialAsync("~/Views/Shared/_Message.cshtml"); }
+<br />
+<div>
+    <div class="card embed-responsive" style="max-width: 900px;">
+        <div class="card-header">
+            <h3>
+               @SR["Data"] &nbsp;
+            </h3>
+        </div>
+        @foreach (TechnicalAssistance technicalAssistance in Model)
+        {
+            <table class="table table-bordered">
+                <tr>
+                    <td colspan="2"><strong>@SR["Corporate Name"]:&nbsp;</strong> @technicalAssistance.SocialReason</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><strong>@SR["CNPJ"]:&nbsp;</strong> @technicalAssistance.Cnpj</td>
+                </tr>
+                <tr>
+                    <td><strong>@SR["State Registration"]:&nbsp;</strong> @technicalAssistance.StateInscription</td>
+                </tr>
+                <tr>
+                    <td><strong>@SR["Email"]:&nbsp;</strong> @technicalAssistance.EmailAta</td>
+                </tr>
+                <tr>
+                    <td><strong>@SR["Phone"]:&nbsp;</strong> @technicalAssistance.Phone</td>
+                </tr>
+                <tr>
+                    <td><strong>@SR["Date register"]:&nbsp;</strong> @technicalAssistance.DateRegister</td>
+                </tr>
+            </table>
+            <div class="row Images">
+                <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@SR["Archives"] - PDF:</strong>
+                @foreach (Archive archive in @technicalAssistance.Archives)
+                {
+                    <div class="col-mx-1">
+                        <a href=@archive.Way>
+                            <div class="">
+                                <span class="helper"></span>
+                                <img src="https://cdn3.iconfinder.com/data/icons/line-icons-set/128/1-02-512.png" class="img-thumbnail img-upload" />
+                            </div>
+                            <input type="hidden" name="image" />
+                        </a>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

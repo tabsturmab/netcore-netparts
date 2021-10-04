@@ -1,0 +1,86 @@
+﻿@model NetParts.Models.ViewModels.Components.ProductListViewModel
+@{
+    var search = Context.Request.Query["search"];
+    var ordination = Context.Request.Query["ordination"].ToString();
+    var action = ViewContext.RouteData.Values["action"].ToString();
+}
+@if (Model.list.Count > 0)
+{
+<div class="container" id="product">
+
+    <div class="row">
+        <div class="offset-md-10 col-md-2">
+            <select id="ordination" asp-for="@ordination" class="form-control" asp-items="Model.ordination"></select>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 2%">
+        <!-- card 1 -->
+        @foreach (var advertisement in Model.list)
+        {
+            <a asp-controller="Product" asp-action="Show" asp-route-id="@advertisement.IdAdvert">
+                <div class="col-lg-3 col-md-6 col-12">
+                    <figure class="card card-product">
+                        <div class="img-wrap">
+
+                            @if (advertisement.Product.Images != null && advertisement.Product.Images.Any())
+                            {
+                                <img src="@advertisement.Product.Images.ElementAt(0).Way" />
+                            }
+                            else
+                            {
+                                <img src="~/img/imagem-produto.png" />
+                            }
+                        </div>
+                        <div class="card-body">
+                            <h4 class="text-dark">@SR["Part number:"]</h4>
+                            <h5 class="card-title">
+                                <figcaption class="info-wrap">
+                                    <span class="title">@advertisement.Product.PartNumber</span>
+                                    <br />
+                                    <br />
+                                    <span class="price-new text-dark">@advertisement.Product.Description</span>
+                                    <br/>
+                                    <span class="text-success">@advertisement.Product.Manufacturer.NameManufacturer </span>
+                                </figcaption>
+                                <i class="fas fa-star text-secondary"></i>
+                                <i class="fas fa-star text-secondary"></i>
+                                <i class="fas fa-star text-secondary"></i>
+                                <i class="fas fa-star text-secondary"></i>
+                                <i class="fas fa-star text-secondary"></i>
+                            </h5>
+                            <p style="font-size: 15px; color: #AAA">
+                                <i class="fas fa-envelope"></i> @Html.Raw(advertisement.TechnicalAssistance.Address.Count <= 0 ? "-" : advertisement.TechnicalAssistance.Address.First().District) | @Html.Raw(advertisement.TechnicalAssistance.Address.Count <= 0 ? "-" : advertisement.TechnicalAssistance.Address.First().City) | @Html.Raw(advertisement.TechnicalAssistance.Address.Count <= 0 ? "-" : advertisement.TechnicalAssistance.Address.First().State1)
+                            </p>
+                            <div class="price-wrap h5">
+                                <span class="text-dark">@advertisement.TechnicalAssistance.SocialReason.Split(" ")[0]  @advertisement.TechnicalAssistance.SocialReason.Split(" ")[1]</span>
+                            </div>
+                            <div class="price-wrap h5">
+                                <span class="price-new text-danger">@advertisement.Price.ToString("C")</span>
+                                <p style="font-size: 12px; color: #AAA" class="price-new text-dark">@SR["Quantity"]: @advertisement.Amount</p>
+                                @if (advertisement.Amount > 0)
+                                {
+                                    <a asp-controller="ShoppingCart" asp-action="AddItem" asp-route-id="@advertisement.IdAdvert" class="btn btn-sm btn-primary float-right">@SR["Add Cart"]</a>
+                                }
+                                else
+                                {
+                                    <a asp-route-id="@advertisement.IdAdvert" class="btn btn-sm btn-outline-danger float-right" onclick="javascript: return false;">@SR["Product Unavailable"]</a>
+                                }
+                                
+                            </div>
+                            
+                        </div>
+                    </figure>
+                </div>
+            </a>
+        }
+    </div>
+    @Html.PagedListPager((IPagedList)Model.list, page => Url.Action(action, new { page = page, search = search, ordination = ordination }))
+</div>
+}
+else
+{
+    <div class="container">
+        <br />
+        <div class="alert alert-info">@SR["We do not have products for this category!"]</div>
+    </div>
+}

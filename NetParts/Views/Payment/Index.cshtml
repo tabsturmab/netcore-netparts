@@ -1,0 +1,144 @@
+﻿@model NetParts.Models.ViewModels.Pagamento.IndexViewModel
+@using NetParts.Models.ProductAggregator
+@{
+    ViewData["Title"] = "Index";
+    double Subtotal = 0;
+}
+<div class="container">
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-md-6">
+            <div id="code_itemside_img2">
+                <div class="box items-bordered-wrap">
+
+                    @foreach (var item in ViewBag.Advertisement as IList<ProductItem>)
+                    {
+                        <figure class="itemside">
+                            <div class="aside">
+                                @if (item.Product.Images.Count > 0)
+                                {
+                                    <img src="@item.Product.Images.First().Way" class="img-sm" />
+                                }
+                                else
+                                {
+                                    <img src="~/img/imagem-produto.png" class="img-sm">
+                                }
+                            </div>
+                            <figcaption class="text-wrap align-self-center">
+                                @{
+                                    var ResultSubtotalItem = item.Price * item.QuantityProduct;
+                                    Subtotal = Subtotal + ResultSubtotalItem;
+                                }
+                                <h5 class="title">Part Number: @item.Product.PartNumber</h5>
+                                <h6 class="title">@item.Product.Description</h6>
+                                <div class="price-wrap">
+                                    <span class="price-new">@item.Price.ToString("C") x @item.QuantityProduct = <strong>@ResultSubtotalItem.ToString("C")</strong></span>
+                                </div>
+                            </figcaption>
+                        </figure>
+                    }
+                </div>
+                <div class="box">
+                    <h4 class="subtitle-doc">
+                        @SR["Resume"]
+                    </h4>
+                    <dl class="dlist-align">
+                        <dt>@SR["Subtotal:"] </dt>
+                        <dd class="text-right subtotal">@Subtotal.ToString("C")</dd>
+                    </dl>
+                    <dl class="dlist-align">
+                        <dt>@SR["Freight:"]</dt>
+                        <dd class="text-right frete">@ViewBag.Frete.TipoFrete - @ViewBag.Frete.Valor.ToString("C")</dd>
+                    </dl>
+                    <dl class="dlist-align">
+                        <dt>@SR["TOTAL:"]</dt>
+                        @{
+                            double valorFrete = (double)ViewBag.Frete.Valor;
+                        }
+                        <dd class="text-right total">@( (Subtotal + valorFrete).ToString("C") )</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            @{ await Html.RenderPartialAsync("~/Views/Shared/_Message.cshtml"); }
+            <div id="code_payment2">
+                <article class="card">
+                    <div class="card-body p-5">
+                        <ul class="nav bg radius nav-pills nav-fill mb-3" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active show" data-toggle="pill" href="#nav-tab-card">
+                                    <i class="fa fa-credit-card"></i> @SR["Credit Card"]
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="pill" href="#nav-tab-paypal">
+                                    <i class="fa fa-barcode"></i> @SR["Bank Slip"]
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane fade active show" id="nav-tab-card">
+                                <form role="form" method="post">
+                                    <div class="form-group">
+                                        <label asp-for="CartaoCredito.NameOnCard">@SR["Full name (on the card)"]</label>
+                                        <input type="text" asp-for="CartaoCredito.NameOnCard" class="form-control" placeholder="">
+                                        <span asp-validation-for="CartaoCredito.NameOnCard"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="CartaoCredito.NumberCard">@SR["Card Number"]</label>
+                                        <div class="input-group">
+                                            <input type="text" asp-for="CartaoCredito.NumberCard" class="form-control" placeholder="">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text text-muted">
+                                                    <i class="fab fa-cc-visa"></i> &nbsp; <i class="fab fa-cc-amex"></i> &nbsp;
+                                                    <i class="fab fa-cc-mastercard"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <span asp-validation-for="CartaoCredito.NumberCard"></span>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <div class="form-group">
+                                                <label for="ExpirationMM" class="hidden-xs">@SR["Expiration"]</label>
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control" placeholder="MM" asp-for="CartaoCredito.ExpirationMM">
+                                                    <input type="number" class="form-control" placeholder="YY" asp-for="CartaoCredito.ExpirationYY">
+                                                </div>
+                                                <span asp-validation-for="CartaoCredito.ExpirationMM"></span>
+                                                <span asp-validation-for="CartaoCredito.ExpirationYY"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label asp-for="CartaoCredito.SecurityCode" data-toggle="tooltip" title="" data-original-title=@SR["3 digits code on back side of the card"]>@SR["CVV"] <i class="fa fa-question-circle"></i></label>
+                                                <input type="number" class="form-control" asp-for="CartaoCredito.SecurityCode">
+                                                <span asp-validation-for="CartaoCredito.SecurityCode"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label asp-for="Parcelamento" data-toggle="tooltip" title="">@SR["Installment"] <i class="fa fa-question-circle"></i></label>
+                                                <select class="form-control" asp-for="Parcelamento.Numero" asp-items="ViewBag.Parcelamentos"></select>
+                                                <span asp-validation-for="Parcelamento"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="subscribe btn btn-primary btn-block" type="submit">@SR["Confirm"]</button>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="nav-tab-paypal">
+                                <p>@SR["Click the button to view the bank slip."]</p>
+                                <p class="text-center">
+                                    <a class="btn btn-outline-primary btn-lg" asp-action="BoletoBancario"> <i class="fa fa-barcode"></i> @SR["Print ticket"] </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</div>

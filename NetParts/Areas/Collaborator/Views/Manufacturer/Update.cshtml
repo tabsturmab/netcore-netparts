@@ -1,0 +1,18 @@
+﻿@model NetParts.Models.Manufacturer
+@{
+    ViewData["Title"] = "Update";
+}
+
+<h1>@SR["Update"]</h1>
+
+<form method="post">
+    <input type="hidden" asp-for="IdManufacturer" />
+    <div class="form-group">
+        <label asp-for="NameManufacturer">@SR["Name Manufacturer"]</label>
+        <input asp-for="NameManufacturer" class="form-control" placeholder=@SR["Enter manufacturer name"]>
+        <span asp-validation-for="NameManufacturer" class="text-danger"></span>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">@SR["Save"]</button> <a asp-action="Index" class="btn btn-info">@SR["Go Back"]</a>
+</form>

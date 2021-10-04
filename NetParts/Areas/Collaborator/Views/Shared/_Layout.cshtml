@@ -1,0 +1,173 @@
+﻿@inject IOptions<RequestLocalizationOptions> LocalizationOptions
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>().RequestCulture.UICulture;
+    var cultures = LocalizationOptions.Value.SupportedUICultures.ToList();
+}
+@inject NetParts.Libraries.Login.LoginCollaborator collaborator
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.6">
+    <title>@ViewBag.Title</title>
+    
+    <script nws-csp-add-nonce = "true" > </script>  
+    <style nws-csp-add-nonce = "true" > </style> 
+
+    <link href="~/css/StyleSheet.css" rel="stylesheet" type="text/css"/>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="~/resources/lib/pagedlist/PagedList.css"/>
+    <link href="~/resources/lib/dashboard/dashboard.js"/>
+    <link href="~/resources/lib/pagedlist/PagedList.css" rel="stylesheet" type="text/css"/>
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @@media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <link href="~/resources/lib/dashboard/dashboard.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/">NetParts&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Home</a>
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link text-light" asp-controller="Home" asp-action="Logout" asp-area="Collaborator"><i class="fas fa-share"></i>@SR["Logout"]</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" asp-action="Panel" asp-controller="Home">
+                                <span data-feather="activity"></span>
+                                @SR["Dashboard"]
+                            </a>
+                        </li>
+                        @if (collaborator.GetCollaborator() != null && collaborator.GetCollaborator().TypeCollaborator == CollaboratorTypeConstant.Administrador)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Manufacturer">
+                                    <span data-feather="file-text"></span>
+                                    @SR["Manufacturer"]
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="TechnicalAssistanceManufacturer">
+                                    <span data-feather="briefcase"></span>
+                                    @SR["Assistance/Manufacturer"]
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="EnabledDisabledTechnical">
+                                    <span data-feather="briefcase"></span>
+                                    @SR["Enabled/Disabled Assistance"]
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Category">
+                                    <span data-feather="check"></span>
+                                    @SR["Categories"]
+                                </a>
+                            </li>
+                        }
+                        @if (collaborator.GetCollaborator() != null && collaborator.GetCollaborator().TypeCollaborator == CollaboratorTypeConstant.Gerente || collaborator.GetCollaborator().TypeCollaborator == CollaboratorTypeConstant.Administrador)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="TechnicalAssistance">
+                                    <span data-feather="cpu"></span>
+                                    @SR["Technical Assistance"]
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Collaborator">
+                                    <span data-feather="users"></span>
+                                    @SR["Collaborator"]
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Address">
+                                    <span data-feather="check-square"></span>
+                                    @SR["Address"]
+                                </a>
+                            </li>
+                        }
+                        @if (collaborator.GetCollaborator() != null && collaborator.GetCollaborator().TypeCollaborator == CollaboratorTypeConstant.Gerente && collaborator.GetCollaborator().TechnicalAssistance.EnabledDisabled == true)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Order">
+                                    <span data-feather="shopping-cart"></span>
+                                    @SR["Shopping"]
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Sale">
+                                    <span data-feather="shopping-bag"></span>
+                                    @SR["Sales"]
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Advertisement">
+                                    <span data-feather="layers"></span>
+                                    @SR["Adverts"]
+                                </a>
+                            </li>
+                        }
+                        @if (collaborator.GetCollaborator() != null && collaborator.GetCollaborator().TechnicalAssistance.EnabledDisabled == true)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index" asp-controller="Product">
+                                    <span data-feather="edit"></span>
+                                    @SR["Products"]
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="UpdatePassword" asp-controller="Collaborator" asp-area="">
+                                    <span data-feather="lock"></span>
+                                    @SR["Update Password"]
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </nav>
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+    <script src="~/resources/lib/dashboard/dashboard.js"></script>
+    <script src="~/js/Actions.js"></script>
+    <script src="~/js/ActionsVisitor.js"></script>
+
+    @RenderSection("Script", required: false);
+
+</body>
+</html>

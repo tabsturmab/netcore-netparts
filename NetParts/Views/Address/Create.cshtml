@@ -1,0 +1,78 @@
+﻿@model NetParts.Models.Address
+@{
+    ViewData["Title"] = "Create";
+}
+
+<form method="post">
+    <div class="container register">
+        <div class="row">
+            <div class="col-md-3 register-left">
+                <img src="https://cdn.pixabay.com/photo/2013/07/12/14/06/arrows-147745_960_720.png" alt="" />
+                <h3>@SR["Welcome"]</h3>
+                <p>@SR["Steps to register on the platform:"]</p>
+                <p>@SR["1.Register the technical assistance data."]</p>
+                <p>@SR["2.Register the collaborator data."]</p>
+                <p class="text-warning">@SR["3.Register the technical assistance address."]</p>
+            </div>
+            <div class="col-md-9 register-right">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <h3 class="register-heading">@SR["Address"]</h3>
+                        <div class="row register-form">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <input type="hidden" asp-for="IdTecAssistance" class="form-control" value="0" />
+                                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                        @Html.HiddenFor(model => model.IdAddress)
+                                        <label asp-for="ZipCode">@SR["Zip Code"]</label>
+                                        <input asp-for="ZipCode" class="remove-cep form-control cep" placeholder=@SR["Enter zip code"]>
+                                        <span asp-validation-for="ZipCode" class="text-danger"></span>
+                                        <div class="alert alert-danger" style="display: none;"></div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="Address1">@SR["Address"]</label>
+                                        <input asp-for="Address1" class="form-control" placeholder=@SR["Enter address"]>
+                                        <span asp-validation-for="Address1" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="NumberAta">@SR["Number"]</label>
+                                        <input asp-for="NumberAta" class="form-control" placeholder=@SR["Enter number"]>
+                                        <span asp-validation-for="NumberAta" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="Complement">@SR["Complement"]</label>
+                                        <input asp-for="Complement" class="form-control" placeholder=@SR["Enter complement"]>
+                                        <span asp-validation-for="Complement" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label asp-for="District">@SR["Neighborhood"]</label>
+                                        <input asp-for="District" class="form-control" readonly="readonly" placeholder=@SR["Enter neighborhood"]>
+                                        <span asp-validation-for="District" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label asp-for="City">@SR["City"]</label>
+                                        <input asp-for="City" class="form-control" readonly="readonly" placeholder=@SR["Enter city"]>
+                                        <span asp-validation-for="City" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label asp-for="State1">@SR["State"]</label>
+                                        <input asp-for="State1" class="form-control" readonly="readonly" placeholder=@SR["Enter state"]>
+                                        <span asp-validation-for="State1" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 center text-center">
+                                    <button type="submit" class="btnRegister">@SR["Save"]</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

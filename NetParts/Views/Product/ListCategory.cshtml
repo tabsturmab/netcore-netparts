@@ -1,0 +1,13 @@
+﻿@model Category
+@{
+    ViewData["Title"] = "Category";
+}
+<br style="clear: both" />
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <span id="breadcrumb">@SR["Category"] > @Model.NameCategory</span>
+        </div>
+    </div>
+</div>
+<vc:product-list></vc:product-list>

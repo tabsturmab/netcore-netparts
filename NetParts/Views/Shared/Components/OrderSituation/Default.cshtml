@@ -1,0 +1,21 @@
+﻿@model List<OrderSituationStatus>
+@{
+    ViewData["Title"] = "Default";
+}
+
+@if (Model != null)
+{
+    <ul class="timeline" id="timeline">
+        @foreach (var orderStatus in Model)
+        {
+            <li class="li @((orderStatus.Concluded)? orderStatus.Cor : "")">
+                <div class="timestamp">
+                    <span class="date">@((orderStatus.DateStatus != null) ? orderStatus.DateStatus.ToString() : "-")</span>
+                </div>
+                <div class="status">
+                    <h4>@orderStatus.Situation</h4>
+                </div>
+            </li>
+        }
+    </ul>
+}

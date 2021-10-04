@@ -1,0 +1,56 @@
+﻿@model X.PagedList.IPagedList<NetParts.Models.Collaborator>
+@{
+    ViewData["Title"] = "Index";
+}
+<br />
+<h1>@SR["Collaborator"]</h1>
+
+<a asp-action="Create" class="btn btn-primary">@SR["Create"]</a>
+<br/>
+<br/>
+
+@{ await Html.RenderPartialAsync("~/Views/Shared/_Message.cshtml"); }
+<br />
+<br />
+@if (Model.Count > 0)
+{
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">@SR["Code"]</th>
+                    <th scope="col">@SR["First Name"]</th>
+                    <th scope="col">@SR["Last Name"]</th>
+                    <th scope="col">@SR["CPF"]</th>
+                    <th scope="col">@SR["Email"]</th>
+                    <th scope="col">@SR["Type Collaborator"]</th>
+                    <th scope="col">@SR["Action"]</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (Collaborator collaborator in Model)
+            {
+                <tr>
+                    <th scope="row">@collaborator.IdCollaborator</th>
+                    <td>@collaborator.FirstName</td>
+                    <td>@collaborator.LastName</td>
+                    <td>@collaborator.Cpf</td>
+                    <td>@collaborator.Email</td>
+                    <td>@collaborator.TypeCollaborator</td>
+                    <td>
+                        <a asp-action="GeneratePassword" asp-route-id="@collaborator.IdCollaborator" class="btn btn-success">@SR["Generate Password"]</a>
+                        <a asp-action="Update" asp-route-id="@collaborator.IdCollaborator" class="btn btn-secondary">@SR["Update"]</a>
+                        <a asp-action="Delete" asp-route-id="@collaborator.IdCollaborator" class="btn btn-danger">@SR["Delete"]</a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }))
+}
+else
+{
+    <span>@SR["No registration registered!"]</span>
+}

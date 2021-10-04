@@ -1,0 +1,91 @@
+﻿@model Order
+@using Newtonsoft.Json
+@using PagarMe
+
+@{
+    ViewData["Title"] = "View";
+    TransacaoPagarMe transaction = JsonConvert.DeserializeObject<TransacaoPagarMe>(Model.DataTransaction);
+}
+<br />
+<br />
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <vc:order-situation order="@Model" />
+            <br />
+            <br />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h3>@SR["Data order"]</h3>
+
+            <table class="table table-bordered">
+                <tr>
+                    <td colspan="2"><strong>@SR["Situation order:"]</strong> @Model.Situation</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><strong>@SR["Company:"]</strong> @transaction.Customer.Name</td>
+                </tr>
+                <tr>
+                    <td><strong>@SR["Form payment"]:</strong> @Model.FormPayment</td>
+                    <td><strong>@SR["Electronic invoice:"]</strong> @Html.Raw(Model.NFe == null ? "-" : "<a href='" + Model.NFe + "' target='_blank'>NF-e</a>")</td>
+                </tr>
+            </table>
+
+            <h3>@SR["Delivery"]</h3>
+            <table class="table table-bordered">
+
+                <tr>
+                    <td><strong>@SR["Zipcode:"]</strong> @transaction.Shipping.Address.Zipcode</td>
+                    <td><strong>@SR["State:"]</strong> @transaction.Shipping.Address.State</td>
+                    <td><strong>@SR["City:"]</strong> @transaction.Shipping.Address.City</td>
+                    <td><strong>@SR["Neighborhood:"]</strong> @transaction.Shipping.Address.Neighborhood</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><strong>@SR["Street:"]</strong> @transaction.Shipping.Address.Street</td>
+                    <td><strong>@SR["StreetNumber:"]</strong> @transaction.Shipping.Address.StreetNumber</td>
+                    <td><strong>@SR["Complementary:"]</strong> @transaction.Shipping.Address.Complementary</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><strong>@SR["Company:"]</strong> @Model.FreightCompany</td>
+                    <td><strong>@SR["Value freight:"]</strong> @Mascara.ConverterPagarMeIntToDecimal(transaction.Shipping.Fee).ToString("C")</td>
+                    <td><strong>@SR["FreightCodTracking:"]</strong> @Html.Raw(Model.FreightCodTracking == null ? "-" : "<a href='https://www.linkcorreios.com.br/" + Model.FreightCodTracking + "' target='_blank'>" + Model.FreightCodTracking + "</a>")</td>
+                </tr>
+            </table>
+
+            <h3>@SR["Product list"]</h3>
+            <table class="table table-bordered">
+                <tr>
+                    <th class="text-center">@SR["Quantity"]</th>
+                    <th class="text-center">@SR["Description"]</th>
+                    <th class="text-center">@SR["Value"]</th>
+                    <th class="text-center">@SR["TOTAL"]</th>
+                </tr>
+
+                @foreach (Item item in transaction.Item)
+                {
+                    <tr>
+                        <td class="text-center">@item.Quantity</td>
+                        <td>@item.Title</td>
+                        <td class="text-right">@Mascara.ConverterPagarMeIntToDecimal(item.UnitPrice).ToString("C")</td>
+                        <td class="text-right">@Mascara.ConverterPagarMeIntToDecimal((item.UnitPrice) * item.Quantity).ToString("C")</td>
+                    </tr>
+                }
+                <tr>
+                    <td colspan="3"><strong>@SR["Freight"]</strong></td>
+                    <td class="text-right">@Mascara.ConverterPagarMeIntToDecimal(transaction.Shipping.Fee).ToString("C")</td>
+                </tr>
+                <tr>
+                    <td colspan="3"><strong>@SR["TOTAL"]</strong></td>
+                    <td class="text-right">@Model.ValueTotal.ToString("C")</td>
+                </tr>
+            </table>
+            <br />
+            <br />
+            <button class="btn btn-outline-primary btn-lg btn-printout">@SR["Print"]</button>
+        </div>
+    </div>
+</div>

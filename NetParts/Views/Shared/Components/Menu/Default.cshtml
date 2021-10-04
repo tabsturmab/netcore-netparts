@@ -1,0 +1,110 @@
+﻿@model List<Category>
+@inject NetParts.Libraries.Login.LoginCollaborator _LoginCollaborator
+@inject IOptions<RequestLocalizationOptions> LocalizationOptions
+@inject NetParts.Libraries.Login.LoginCollaborator collaborator
+@{
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>().RequestCulture.UICulture;
+    var cultures = LocalizationOptions.Value.SupportedUICultures.ToList();
+    var search = Context.Request.Query["search"];
+}
+
+@{
+    var culture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>().RequestCulture.UICulture;
+}
+
+@if (culture.TextInfo.IsRightToLeft)
+{
+
+}
+
+@if (culture.TextInfo.IsRightToLeft)
+{
+
+}
+
+<nav class="navbar navbar-dark navbar-expand-lg navbar-default fixed-top">
+    <div class="container-fluid">
+
+        <a class="navbar-brand" href="/">
+            <img src="~/img/logoNetpartsB.png" alt="NetParts">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto text-light">
+                <li class="nav-item @((ViewContext.RouteData.Values["controller"].ToString() == "Home" && ViewContext.RouteData.Values["action"].ToString() == "Index") ? "active" : "" )">
+                    <a class="nav-link text-light" href="/"><i class="fas fa-home"></i> Home <span class="sr-only">(current)</span></a>
+                </li>
+
+                @{
+                    var GetCategories = Model.ToList();
+                }
+                @if (GetCategories != null && GetCategories.Count > 0)
+                {
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle text-light @((ViewContext.RouteData.Values["controller"].ToString() == "Home" && ViewContext.RouteData.Values["action"].ToString() == "Category") ? "active" : "" )" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+                            <i class="fas fa-list-alt">&nbsp;</i>@SR["Categories"]
+                        </a>
+                        <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+                            @{
+                                var CategoriesMasters = GetCategories.Where(a => a.CategoryMasterId == null).ToList();
+                                ViewData["GetCategories"] = GetCategories;
+                            }
+                            @foreach (var category in CategoriesMasters)
+                            {
+                                @await Html.PartialAsync("~/Views/Shared/Components/Menu/_Submenu.cshtml", new ViewDataDictionary(ViewData) { { "CategoryMaster", category } })
+                            }
+                        </ul>
+                    </div>
+                }
+
+                <li class="nav-item">
+                    <a class="nav-link text-light @((ViewContext.RouteData.Values["controller"].ToString() == "Home" && ViewContext.RouteData.Values["action"].ToString() == "Contact") ? "active" : "" )" href="/Home/Contact"><i class="far fa-address-book"></i> @SR["Contact"]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" asp-controller="Home" asp-action="Panel" asp-area="Collaborator"><i class="fas fa-user-alt">&nbsp;</i>@SR["Panel"]</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" asp-controller="TechnicalAssistance" asp-action="Create" asp-area=""><i class="fas fa-edit">&nbsp;</i>@SR["Register"]</a>
+                </li>
+                <li class="nav-link dropdown">
+                    <a href="#" class="dropdown-toggle text-light" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-language">&nbsp;</i>@SR["Language"] <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        @foreach (var item in cultures)
+                        {
+                            var active = item.Name == requestCulture.Name ? "active" : null;
+                            var direction = item.TextInfo.IsRightToLeft ? "rtl" : "ltr";
+                            <text>
+                                <li class="@active">
+                                    <a style="direction:@direction" asp-area="" asp-controller="Home" asp-action="SetCulture" asp-route-culture="@item.Name" asp-route-returnUrl="@Context.Request.Path">@item.NativeName</a>
+                                </li>
+                            </text>
+                        }
+                    </ul>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0" method="get">
+                <input class="form-control mr-sm-2" type="search" name="search" value="@search" placeholder="@SR["Part Number"]" aria-label="Search">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit"> @SR["Search"]</button>
+                @if (_LoginCollaborator.GetCollaborator() != null)
+                {
+
+                    <a class="nav-link text-light" asp-controller="Home" asp-action="Panel" asp-area="Collaborator"><i class="fas fa-user-alt"></i> @_LoginCollaborator.GetCollaborator().FirstName </a>
+                }
+                else
+                {
+                    <a class="nav-link text-light" asp-controller="Home" asp-action="Login" asp-area="Collaborator"><i class="fas fa-user-alt"></i>@SR["Login"]</a>
+                }
+                <a class="nav-link text-light" asp-controller="ShoppingCart" asp-action="Index"><i class="fas fa-shopping-cart"></i>@SR["Cart"]</a>
+                @if (collaborator.GetCollaborator() != null)
+                {
+                    <a class="nav-link text-light" asp-controller="Home" asp-action="Logout" asp-area="Collaborator"><i class="fas fa-share"></i>@SR["Logout"]</a>
+                }
+            </form>
+        </div>
+    </div>
+</nav>

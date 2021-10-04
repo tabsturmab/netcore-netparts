@@ -1,0 +1,40 @@
+﻿@model NetParts.Models.Collaborator
+@{
+    ViewData["Title"] = "Update";
+}
+<h1>@SR["Update"]</h1>
+
+<form method="post">
+    <input type="hidden" asp-for="IdCollaborator" />
+    <div class="form-group">
+        <label asp-for="FirstName">@SR["First Name"]</label>
+        <input asp-for="FirstName" class="form-control">
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LastName">@SR["Last Name"]</label>
+        <input asp-for="LastName" class="form-control">
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Cpf">CPF</label>
+        <input asp-for="Cpf" class="form-control form-control-lg cpf">
+        <span asp-validation-for="Cpf" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email">@SR["E-mail"]</label>
+        <input asp-for="Email" class="form-control">
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    
+    <div class="form-group">@SR["Type Collaborator"]
+        @Html.DropDownListFor(d => d.TypeCollaborator, new SelectList(new List<object>
+        {
+            new {value = "Comum", text = "Comum"},
+            new {value = "Gerente", text = "Gerente"},
+        }, "value", "text", ""), new {@class = "form-control"})
+        @Html.ValidationMessageFor(model => model.TypeCollaborator, "", new { @class = "text-danger" })
+    </div>
+
+    <button type="submit" class="btn btn-primary">@SR["Save"]</button> <a asp-action="Index" class="btn btn-info">@SR["Go Back"]</a>
+</form>

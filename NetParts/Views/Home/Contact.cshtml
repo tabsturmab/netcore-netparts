@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewData["Title"] = "Contact";
+    NetParts.Models.Contact contact = (NetParts.Models.Contact)
+    ViewData["CONTACT"];
+}
+
+<main role="main">
+    <br />
+    <a href="~/Views/Home/Contact.cshtml"></a>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <div class="container">
+        <div class="row">
+            <aside class="col-md-6">
+                <h4 class="subtitle-doc">
+                    @SR["Contact"]
+                </h4>
+                <div id="code_desc_simple">
+                    <div class="box">
+                        <dl>
+                            <dt>@SR["Notification/Complaint:"] </dt>
+                            <dd>phoenix2020ifsp@gmail.com</dd>
+                        </dl>
+                        <dl>
+                            <dt>@SR["Sales:"]</dt>
+                            <dd>https://netparts2020.azurewebsites.net/</dd>
+                        </dl>
+                        <dl>
+                            <dt>@SR["SAC:"]</dt>
+                            <dd>proenix2020ifsp@gmail.com</dd>
+                        </dl>
+                    </div>
+                </div>
+            </aside>
+            <aside class="col-sm-6">
+
+                <h4 class="subtitle-doc">
+                    @SR["Message"]
+                </h4>
+                <div>
+                    <article class="card">
+                        <div class="card-body p-5">
+                            @{ await Html.RenderPartialAsync("~/Views/Shared/_Message.cshtml"); }
+                            <form role="form" method="post" action="/Home/ContactAction">
+                                <div class="form-group">
+                                    <label for="name">@SR["Name"]</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fa fa-user"></i></span>
+                                        </div>
+                                        <input type="text" id="name" class="form-control" name="name" placeholder=""
+                                               required="" value="@(contact != null ? contact.Name:"")">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">E-mail</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="fa fa-at"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" name="email" id="email" placeholder="" value="@(contact != null ? contact.Email:"")">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label for="text"><span class="hidden-xs">@SR["Text"]</span> </label>
+                                            <div class="form-inline">
+                                                <textarea class="form-control" name="text" id="text" style="width: 100%">@(contact != null ? contact.Text:"")</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="subscribe btn btn-primary btn-block" type="submit">@SR["Submit"] </button>
+                            </form>
+                        </div>
+                    </article>
+                </div>
+            </aside>
+        </div>
+    </div>
+</main>

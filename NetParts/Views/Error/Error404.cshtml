@@ -1,0 +1,22 @@
+﻿
+@{
+    ViewData["Title"] = "Error404";
+}
+<br />
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col-8">
+            <h1>Error - 404 - @SR["Page not found!"]!</h1>
+            <p>
+                @SR["The page does not exist!"]
+                <br />
+                <br />
+                <a asp-action="Index" asp-controller="Home" class="btn btn-outline-primary">@SR["Go Back"]</a>
+            </p>
+        </div>
+        <div class="col-4">
+            <img src="~/img/error404.png" style="width:100%"  alt=@SR["Image page not found!"] />
+        </div>
+    </div>
+</div>

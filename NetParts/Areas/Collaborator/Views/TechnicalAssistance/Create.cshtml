@@ -1,0 +1,71 @@
+﻿@model NetParts.Models.ViewModels.TechnicalAssistanceArchive
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>@SR["Create"]</h1>
+
+
+<form method="post" enctype="multipart/form-data">
+    <div class="border border-light rounded shadow col-md-8">
+        <div class="container">
+            <div class="form-group">
+                <input type="hidden" asp-for="technicalAssistance.IdTecAssistance" />
+                <label asp-for="technicalAssistance.SocialReason">@SR["Corporate Name"]</label>
+                <input asp-for="technicalAssistance.SocialReason" class="form-control" placeholder=@SR["Enter corporate name"]>
+                <span asp-validation-for="technicalAssistance.SocialReason" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="technicalAssistance.Cnpj">@SR["CNPJ"]</label>
+                    <input asp-for="technicalAssistance.Cnpj" class="form-control form-control-lg cnpj" placeholder=@SR["Enter cnpj"]>
+                    <span asp-validation-for="technicalAssistance.Cnpj" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="technicalAssistance.StateInscription">@SR["State Registration"]</label>
+                    <input asp-for="technicalAssistance.StateInscription" class="form-control" placeholder=@SR["Enter state registration"]>
+                    <span asp-validation-for="technicalAssistance.StateInscription" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="technicalAssistance.EmailAta">@SR["Email"]</label>
+                    <input asp-for="technicalAssistance.EmailAta" class="form-control" placeholder=@SR["Enter email"]>
+                    <span asp-validation-for="technicalAssistance.EmailAta" class="text-danger"></span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label asp-for="technicalAssistance.Phone">@SR["Phone"]</label>
+                    <input asp-for="technicalAssistance.Phone" class="form-control form-control-lg phone" placeholder=@SR["Enter phone"]>
+                    <span asp-validation-for="technicalAssistance.Phone" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row Archives">
+                @for (int i = 0; i < 6; i++)
+                {
+                    <div class="col-md-2">
+                        <input asp-for="ImageFile" type="file" name="imagem" class="input-file" />
+                        <div class="container-img-thumbnail">
+                            <span class="helper"></span><img src="~/img/image-padrao.png" class="img-thumbnail img-upload" />
+                        </div>
+                        <div class="btn btn-danger btn-image-delete btn-ocultar">X</div>
+                        <input type="hidden" name="image" />
+                    </div>
+                }
+            </div>
+            <br />
+            <br />
+            <br />
+            @Html.LabelFor(model => model.technicalAssistance.DateRegister, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="form-group">
+                @Html.DropDownListFor(d => d.technicalAssistance.DateRegister, new SelectList(new List<object>
+                {
+                    new {value = DateTime.Now, text = DateTime.Now},
+                }, "value", "text", ""), new {@class = "form-control"})
+                @Html.ValidationMessageFor(model => model.technicalAssistance.DateRegister, "", new { @class = "text-danger" })
+            </div>
+            <button type="submit" class="btn btn-primary">@SR["Save"]</button> <a asp-action="Index" class="btn btn-info">@SR["Go Back"]</a>
+        </div>
+    </div>
+</form>

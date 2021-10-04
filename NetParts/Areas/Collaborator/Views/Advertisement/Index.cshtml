@@ -1,0 +1,65 @@
+﻿@model X.PagedList.IPagedList<NetParts.Models.Advertisement>
+@{
+    ViewData["Title"] = "Index";
+    var search = Context.Request.Query["search"];
+}
+
+<h1>@SR["Advertisement"]</h1>
+
+<br />
+<br />
+<form method="get">
+    <div class="form-group">
+        <label for="search"></label>
+        <input type="text" name="search" id="search" value="@search" class="form-control" placeholder="Digite o nome do produto">
+    </div>
+    <button type="submit" class="btn btn-primary">OK</button>
+</form>
+<br />
+<br />
+
+@{ await Html.RenderPartialAsync("~/Views/Shared/_Message.cshtml"); }
+
+<a asp-action="Create" class="btn btn-primary">@SR["Create"]</a>
+
+<br />
+
+@if (Model.Count > 0)
+{
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">@SR["Code"]</th>
+                    <th scope="col">@SR["Technical Assistance"]</th>
+                    <th scope="col">@SR["Part Number"]</th>
+                    <th scope="col">@SR["Quantity"]</th>
+                    <th scope="col">@SR["Price"]</th>
+                    <th scope="col">@SR["Action"]</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Advertisement advertisement in Model)
+                {
+                <tr>
+                    <th scope="row">@advertisement.IdAdvert</th>
+                    <td>@advertisement.TechnicalAssistance.SocialReason</td>
+                    <td>@advertisement.Product.PartNumber</td>
+                    <td>@advertisement.Amount</td>
+                    <td>@advertisement.Price</td>
+                    <td>
+                        <a asp-action="Update" asp-route-id="@advertisement.IdAdvert" class="btn btn-secondary">@SR["Update"]</a>
+                        <a asp-action="Delete" asp-route-id="@advertisement.IdAdvert" class="btn btn-danger">@SR["Delete"]</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page = page, search = search }))
+}
+else
+{
+    <span>Nenhum registro cadastrado!</span>
+}

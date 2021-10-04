@@ -1,0 +1,108 @@
+﻿@model NetParts.Models.Advertisement
+<br style="clear: both" />
+<div class="container">
+
+    <section id="product_detail">
+        <div id="code_prod_detail">
+            <div class="card">
+                <div class="row no-gutters">
+                    <aside class="col-sm-5 border-right">
+                        <article class="gallery-wrap">
+                            <div class="img-big-wrap">
+                                <div>
+                                    @if (Model.Product.Images != null && Model.Product.Images.Count > 0)
+                                    {
+                                        <a href="@Model.Product.Images.ElementAt(0).Way" data-fancybox><img src="@Model.Product.Images.ElementAt(0).Way"></a>
+                                    }
+                                    else
+                                    {
+                                        <a href="~/img/imagem-produto.png" data-fancybox><img src="~/img/imagem-produto.png"></a>
+                                    }
+                                </div>
+                            </div>
+                            <div class="img-small-wrap">
+                                @if (Model.Product.Images != null && Model.Product.Images.Count > 0)
+                                {
+                                    foreach (Image image in Model.Product.Images)
+                                    {
+                                        <div class="item-gallery"> <img src="@image.Way"></div>
+                                    }
+                                }
+                            </div>
+                        </article>
+                    </aside>
+                    <aside class="col-sm-7">
+                        <article class="p-5">
+                            <h3 class="title mb-3">@SR["Part number:"]&nbsp;@Model.Product.PartNumber</h3>
+                            <dl>
+                                <dt>@SR["Description"]</dt>
+                                <dd>
+                                    <p>
+                                        @Model.Product.Description
+                                    </p>
+                                </dd>
+                            </dl>
+                            <div class="mb-3">*<var class="price h3 text-warning">
+                                    <span class="num">@Model.Price.ToString("C")</span>
+                                </var>
+                                <span>/@SR["unity"]</span>
+                            </div>
+                            <div class="mb-3">
+                                @SR["Quant in stoc:"]<var class="price h3 text-warning">
+                                <span>@Model.Amount</span>
+                            </var>
+                            </div>
+                        <dl class="row">
+                            <dt class="col-sm-3">@SR["Weight (Kg)"]</dt>
+                            <dd class="col-sm-9">@Model.Product.Weight</dd>
+                            <dt class="col-sm-3">@SR["Width"]</dt>
+                            <dd class="col-sm-9">@Model.Product.Width1</dd>
+                            <dt class="col-sm-3">@SR["Height"]</dt>
+                            <dd class="col-sm-9">@Model.Product.Height</dd>
+                            <dt class="col-sm-3">@SR["Length"]</dt>
+                            <dd class="col-sm-9">@Model.Product.Length</dd>
+                        </dl>
+                        <dl>
+                            <dd>
+                                <p>
+                                    <h3 class="title mb-3">@Model.TechnicalAssistance.SocialReason</h3>
+                                </p>
+                            </dd>
+                        </dl>
+                        <div class="rating-wrap">
+
+                            <ul class="rating-stars">
+                                <li style="width: 80%" class="stars-active">
+                                    <i class="fa fa-star"></i> <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i> <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </li>
+                            </ul>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-5">
+                                <dl class="dlist-inline">
+                                </dl>
+                            </div>
+                        </div>
+                        <hr>
+                        @if (@Model.Amount > 0)
+                        {
+                            <a asp-controller="ShoppingCart" asp-action="AddItem" asp-route-id="@Model.IdAdvert" class="btn btn-sm btn-primary float-right">@SR["Add Cart"]</a>
+                        }
+                        else
+                        {
+                            <a asp-route-id="@Model.IdAdvert" class="btn btn-sm btn-outline-danger float-right" display="none">@SR["Product Unavailable"]</a>
+                        }
+                        </article>
+                        <article class="gallery-wrap">
+                            <div class="img-big-wrap">
+                            </div>
+                        </article>
+                    </aside>
+                </div>
+            </div> 
+        </div> 
+    </section>
+</div>

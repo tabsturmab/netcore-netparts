@@ -1,0 +1,118 @@
+﻿@using System.Linq
+@model NetParts.Models.ViewModels.ProductImage
+@{
+    ViewData["Title"] = "Update";
+}
+
+<h1>@SR["Update"]</h1>
+
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="product.IdProduct" />
+    <div class="row">
+        <div class="form-group col-md-4">
+            <label asp-for="product.IdCategory">@SR["Category"]</label>
+            <select asp-for="product.IdCategory" style="text-transform: uppercase" class="form-control" asp-items="@ViewBag.Categories">
+                <option value="">@SR["Select"]</option>
+            </select>
+            <span asp-validation-for="product.IdCategory" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="product.IdManufacturer">@SR["Manufacturer"]</label>
+            <select asp-for="product.IdManufacturer" class="form-control" asp-items="@ViewBag.Manufacturers">
+                <option value="">@SR["Select"]</option>
+            </select>
+            <span asp-validation-for="product.IdManufacturer" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-4">
+            <label asp-for="product.PartNumber"></label>
+            <input asp-for="product.PartNumber" class="form-control" />
+            <span asp-validation-for="product.PartNumber" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="product.Description"></label>
+        <input asp-for="product.Description" class="form-control" />
+        <span asp-validation-for="product.Description" class="text-danger"></span>
+    </div>
+
+    <h2>@SR["Part/component dimensions"]</h2>
+
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label asp-for="product.Weight"></label>
+            <div class="input-group mb-2">
+                <input asp-for="product.Weight" class="form-control" />
+                <div class="input-group-prepend">
+                    <div class="input-group-text">kg</div>
+                </div>
+            </div>
+            <span asp-validation-for="product.Weight" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="product.Width1"></label>
+            <div class="input-group mb-2">
+                <input asp-for="product.Width1" type="number" class="form-control" />
+                <div class="input-group-prepend">
+                    <div class="input-group-text">cm</div>
+                </div>
+            </div>
+            <span asp-validation-for="product.Width1" class="text-danger"></span>
+        </div>
+
+        <div class="form-group col-md-3">
+            <label asp-for="product.Height"></label>
+            <div class="input-group mb-2">
+                <input asp-for="product.Height" type="number" class="form-control" />
+                <div class="input-group-prepend">
+                    <div class="input-group-text">cm</div>
+                </div>
+            </div>
+            <span asp-validation-for="product.Height" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-3">
+            <label asp-for="product.Length"></label>
+            <div class="input-group mb-2">
+                <input asp-for="product.Length" type="number" class="form-control" />
+                <div class="input-group-prepend">
+                    <div class="input-group-text">cm</div>
+                </div>
+            </div>
+            <span asp-validation-for="product.Length" class="text-danger"></span>
+            <span asp-validation-for="product.Length" class="text-danger"></span>
+           
+        </div>
+    </div>
+    <div class="row Images">
+        @foreach (Image image in Model.product.Images)
+        { 
+            <div class="col-md-2">
+                <a href=@image.Way>
+                    <input asp-for="ImageFile" type="file" id="image.IdImage" class="input-file imgFile" />
+                    <div class="container-img-thumbnail">
+                        <span class="helper"></span><img src=@image.Way class="img-thumbnail img-upload2" />
+                    </div>
+                    <div class="btn btn-danger btn-image-delete btn-ocultar btn-image-exist">X</div>
+                    <input type="hidden" name="image" />
+                </a>
+            </div>
+        }
+
+        @for (int i = 0; i < (6 - Model.product.Images.Count); i++)
+        {
+
+            <div class="col-md-2">
+                <input asp-for="ImageFile" type="file" name="imagem" id="upload" class="input-file imgFile" />
+                <div class="container-img-thumbnail">
+                    <span class="helper"></span><img src="~/img/image-padrao.png" class="img-thumbnail img-upload2" />
+                </div>
+                <div class="btn btn-danger btn-image-delete btn-ocultar">X</div>
+                <input type="hidden" name="image" />
+            </div>
+        }
+    </div>
+    <br />
+    <br />
+    <br />
+    <button type="submit" class="btn btn-primary">@SR["Save"]</button> <a asp-action="Index" class="btn btn-info">@SR["Go Back"]</a>
+</form>

@@ -1,0 +1,10 @@
+﻿@model NetParts.Models.TechnicalAssistance
+@{
+    ViewData["Title"] = "Index";
+}
+<br />
+<h1>@SR["Technical Assistance"]</h1>
+<br>
+@{ await Html.RenderPartialAsync("~/Views/Shared/_Message.cshtml"); }
+<br>
+<a asp-action="Register" asp-controller="Home" class="btn btn-info">@SR["Go Back"]</a>

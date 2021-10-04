@@ -1,0 +1,111 @@
+﻿@using NetParts.Models.ProductAggregator
+@model IPagedList<Address>
+@{
+    ViewData["Title"] = "AddAddress";
+    var products = (List<ProductItem>)ViewBag.Products;
+    double total = 0;
+
+    foreach (ProductItem product in products)
+    {
+        double resultado = product.Price * product.QuantityProduct;
+        total += resultado;
+    }
+}
+
+<h1>@SR["Add Address"]</h1>
+
+<div class="container">
+    <br />
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            @{ await Html.RenderPartialAsync("~/Views/Shared/_Message.cshtml"); }
+
+            <table class="table table-hover">
+                <tbody>
+                    @foreach (Address endereco in ViewBag.address)
+                    {
+                        <tr>
+                            <th scope="row">
+                                <input type="radio" name="endereco" value="@endereco.ZipCode" id="@endereco.IdAddress" />
+                                <input type="hidden" name="cep" value="@endereco.IdAddress" />
+                            </th>
+                            <td>
+                                <label for="@endereco.IdAddress">
+                                    <p>
+                                        @endereco.ZipCode | @endereco.Address1, @endereco.Complement, @endereco.NumberAta, @endereco.District, @endereco.City, @endereco.State1,
+                                    </p>
+                                </label>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="text-center">
+                <a asp-action="AddAdress" asp-controller="Home" asp-area="Collaborator" asp-route-returnUrl="@Url.Action("AddAddress", "ShoppingCart", new {area = ""})" class="btn btn-primary">@SR["Create New Address"]</a>
+            </div>
+            <br />
+            <div class="card-group">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">-</h5>
+                        <p class="card-text">-</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">
+                        </small>
+                    </div>
+                </div>
+                <div class="card">
+
+                    <div class="card-body">
+                        <h5 class="card-title">-</h5>
+                        <p class="card-text">-</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">
+                        </small>
+                    </div>
+                </div>
+                <div class="card">
+
+                    <div class="card-body">
+                        <h5 class="card-title">-</h5>
+                        <p class="card-text">-</p>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="card-group">
+                <div class="card">
+
+                    <div class="card-body">
+                        <h5 class="card-title">@SR["Products"]</h5>
+                        <p class="card-text texto-produto">@total.ToString("C")</p>
+                    </div>
+                </div>
+                <div class="card">
+
+                    <div class="card-body">
+                        <h5 class="card-title">@SR["Freight"]</h5>
+                        <p class="card-text texto-frete">-</p>
+                    </div>
+                </div>
+                <div class="card">
+
+                    <div class="card-body">
+                        <h5 class="card-title">@SR["Total"]</h5>
+                        <p class="card-text texto-total">-</p>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <a asp-action="Index" asp-controller="Payment" class="btn btn-primary btn-continuar disabled">@SR["Continue"]</a>
+        </div>
+
+    </div>
+</div>
